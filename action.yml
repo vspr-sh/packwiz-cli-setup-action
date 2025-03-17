@@ -1,0 +1,32 @@
+name: 'packwiz CLI Setup'
+description: 'Setup the packwiz CLI in your'
+
+
+inputs:
+
+  go-version:
+    description: 'The version of Go to use'
+    required: false
+    default: '>=1.19'
+
+  commit:
+    description: 'Specific commit hash from [packwiz/packwiz](https://github.com/packwiz/packwiz) to use'
+    required: false
+    default: 'latest'
+
+
+runs:
+  using: composite
+  steps:
+
+    - uses: actions/setup-go@v5
+      with: 
+        go-version: ${{ inputs.go-version }}
+    - run: go version
+      shell: bash
+
+    - run: go install github.com/packwiz/packwiz@${{ inputs.commit }}
+      shell: bash
+    
+    - run: echo "${{ runner.home }}/go/bin" >> $GITHUB_PATH
+      shell: bash
